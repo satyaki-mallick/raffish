@@ -1,4 +1,3 @@
-'use strict';
 
 var ExcelToJSON = function () {
   this.parseExcel = function (file) {
@@ -9,13 +8,11 @@ var ExcelToJSON = function () {
       var workbook = XLSX.read(data, {
         type: "binary",
       });
-      // Here is your object
       var XL_row_object = XLSX.utils.sheet_to_row_object_array(
         workbook.Sheets[workbook.SheetNames[0]]
       );
       var json_object = JSON.stringify(XL_row_object);
-      // console.log(JSON.parse(json_object));
-      // jQuery('#xlx_json').val(json_object);
+      console.log(JSON.parse(json_object));
       var tableBody = document.getElementById("tableBody");
       for (item of XL_row_object) {
         var row = document.createElement("tr");
@@ -51,7 +48,7 @@ var ExcelToJSON = function () {
 };
 
 function handleFileSelect(evt) {
-  var files = evt.target.files; // FileList object
+  var files = evt.target.files;
   var xl2json = new ExcelToJSON();
   xl2json.parseExcel(files[0]);
 }
