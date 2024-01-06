@@ -1,0 +1,33 @@
+body {
+    background-color: rgba(29, 219, 155, 0.214);
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 75px;
+}
+
+#upload-box {
+    background-color: beige;
+    border: 5px solid #444;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+#upload-box-2 {
+    background-color: beige;
+    border: 5px solid #444;
+    padding: 20px;
+    margin: auto;
+    text-align: center;
+}
+
+input, button {
+    padding: 10px;
+    font-size: 16px;
+    
+}
+
+#upload-box-2 h3 {
+    font-family: 'Courier New', Courier, monospace;
+}
+/* . for class name
+    # for id
+    * for everything in page */
