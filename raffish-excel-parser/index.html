@@ -4,14 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link href="style.css" rel="stylesheet"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
   <script src="excel_parser.js"></script>
+  <script src="test.js"></script>
 </head>
 <body>
+  <button id="mybutton" onclick="button_click()">OK!</button>
   <form enctype="multipart/form-data">
     <input id="upload" type=file name="files[]">
   </form>
+  <button id="submit_selection" onclick="submit_selection()">Submit Selection</button>
   <table id="myTable"> 
     <thead> 
       <tr> 
