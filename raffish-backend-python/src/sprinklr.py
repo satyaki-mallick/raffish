@@ -10,51 +10,125 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 class Sprinklr:
-    def __init__(self, percolate_obj: Percolate):
+    def __init__(self):
+        self.created_campaign_dict = {}
+    
+    def init_with_percolate(self, percolate_obj: Percolate):
         self.percolate_obj = percolate_obj
+        self.tags = []
+        self.custom_fields = {}
+        self.campaign_name = None
 
     def create_campaign(self):
         self.campaign_name = self.create_campaign_name()
-        self.create_campaign_payload()
-        created_campaign_id = self.push_payload()
-        self.create_briefs(created_campaign_id)
+        self.create_tags()
+        self.create_custom_fields()
+        print(self.created_campaign_dict)
+        if self.is_subcampaign():
+            payload = self.create_subcampaign_payload()
+            print("is subcampaign")
+        else:
+            payload = self.create_campaign_payload()
+            print("is campaign")
+        self.push_payload(payload)
 
-    def create_campaign_payload(self):
-        self.payload = {
-            "name": self.campaign_name + "to",
+    def create_tags(self):
+        tags = []
+        if not pd.isna(self.percolate_obj.country) : tags.append("country: " + str(self.percolate_obj.country))
+        if not pd.isna(self.percolate_obj.region) : 
+            clean_string = re.sub(";;;", ",", str(self.percolate_obj.region))
+            tags.append("region: " + clean_string)
+        if not pd.isna(self.percolate_obj.year) : tags.append("year: " + str(self.percolate_obj.year))
+        if not pd.isna(self.percolate_obj.quarter) : tags.append("quarter: " + str(self.percolate_obj.quarter))
+        if not pd.isna(self.percolate_obj.type) : tags.append("type: " + str(self.percolate_obj.type))
+        if not pd.isna(self.percolate_obj.objective) : tags.append("objective: " + str(self.percolate_obj.objective))
+        self.tags = tags
+
+    def create_custom_fields(self):
+        channel = "" if pd.isna(self.percolate_obj.channel) else str(self.percolate_obj.channel)
+        channel = re.sub(";;;", ",", channel)
+        channel = channel.split(",")
+        brand = "" if pd.isna(self.percolate_obj.brand) else str(self.percolate_obj.brand)
+        brand = brand.split(",")
+        custom_fields = {
+            "Channel Type": channel,
+            "Brand": brand
+        }
+        self.custom_fields = custom_fields
+
+    def is_subcampaign(self):
+        if self.campaign_stem_text in self.created_campaign_dict:
+            return True
+        return False
+
+    def create_subcampaign_payload(self):
+
+        payload = {
+            "name": self.campaign_name + "_Stay_Period",
             "description": self.percolate_obj.desc,
+            "parentCampaignId": self.created_campaign_dict.get(self.campaign_stem_text),
             "startDate": self.percolate_obj.startdate_unix,
             "endDate": self.percolate_obj.enddate_unix,
+            "tags": self.tags,
             "status": "DRAFT",
+            "partnerCustomFields": self.custom_fields,
         }
+        print(payload)
+        return payload
 
-    def push_payload(self):
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization":
-            f"Bearer {config.TOKEN}",
-            "Key": config.APP_KEY,
+    def create_campaign_payload(self):
+        payload = {
+            "name": self.campaign_name,
+            "description": "" if pd.isna(self.percolate_obj.desc) else self.percolate_obj.desc,
+            "startDate": self.percolate_obj.startdate_unix,
+            "endDate": self.percolate_obj.enddate_unix,
+            "tags": self.tags,
+            "status": "DRAFT",
+            "partnerCustomFields": self.custom_fields,
         }
+        print(payload)
+        return payload
+
+    def push_payload(self, payload):
         response = requests.post(config.CREATE_CAMPAIGN_API,
-                      data=json.dumps(self.payload),
-                      headers=headers)
+                      data=json.dumps(payload),
+                      headers=config.HEADERS)
+        
+        if response.status_code != 200:
+            logging.error(f'Failed Creating Campaign Name: {self.campaign_name}')
+            logging.error(response.content)
+        else:
+            response_dict = json.loads(response.content)
+            c_id = response_dict["data"]["id"]
+            logging.info(f"Created Campaign: {self.campaign_name} with id: {c_id}")
+            self.update_key_dict(c_id)
+
+    def update_key_dict(self, c_id):
+        self.created_campaign_dict[self.campaign_stem_text] = c_id
+
+    def create_brief_background(self, campaign_id):
+        url = config.CREATE_CAMPAIGN_BRIEF_API.format(campaign_id = campaign_id)
+        self.brief_name = "Background"
+        self.brief_file = self.percolate_obj.brief_description
+
+        payload = {}
+
+        response = requests.post(url,
+                data=json.dumps(payload),
+                headers=config.HEADERS)
         
         if response.status_code != 200:
             logging.error(f'Failed importing Campaign Name: {self.campaign_name}')
             logging.error(response.content)
         else:
-            response_dict = json.loads(response.content)
-            return response_dict["data"]["id"]
-
-    def create_briefs(self, campaign_id):
-        url = config.CREATE_CAMPAIGN_BRIEF_API.format(campaign_id = campaign_id)
-        print(url)
+            logging.info(f"Brief Background success for {campaign_id}")
 
     def create_campaign_name(self):
         workfront_no = self.percolate_obj.id.split(":")[1]
         scope = self._parse_scope(self.percolate_obj.audience)
         campaign_text = self._parse_text(self.percolate_obj.title)
         year = self.percolate_obj.year
+        self.campaign_stem_text = campaign_text
 
         return "_".join([workfront_no, scope, campaign_text, str(year)])
 
@@ -75,16 +149,7 @@ class Sprinklr:
         return scope
 
     def _parse_text(self, name):
-        strings_to_remove = [
-            "-",
-            "Booking Period","Book period",
-            "Stay Period","Stay period","STAY",
-            "2019","2020","2021","2022","2023",
-            "Q1","Q2","Q3","Q4",
-            "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
-            "TEST", "Test"
-        ]
-        strings_to_remove = "|".join(strings_to_remove)
+        strings_to_remove = "|".join(config.strings_to_remove)
         clean_string = re.sub(strings_to_remove, "", name)
         clean_string = clean_string.strip()
         return re.sub("\s", "_", clean_string)
