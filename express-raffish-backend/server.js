@@ -4,6 +4,8 @@ const express = require("express");
 const XLSX = require("xlsx");
 const app = express();
 
+app.listen(3000);
+
 function parseExcel(file) {
   let workbook = XLSX.readFile (file, {
     type: "binary",
@@ -38,29 +40,43 @@ app.get("/test", (req, res) => {
 
 app.get("/data", (req, res) => {
   globalSheet = parseExcel("/home/ec2-user/raffish-all/small_excel.xlsx");
-  selection = globalSheet[0]
-  id = selection["ID"];
-
-  // campaign specific
-  name_ = selection["Campaign Title|||ignore"];
-  desc = selection["Campaign Description|||ignore"];
-  startdate = selection["Campaign Start Date|||ignore"];
-  enddate = selection["Campaign End Date|||ignore"];
-  status_ = "DRAFT";
-  audience = selection["Audience|||schema:1383551219579469649"];
-  brand = selection["Brand|||schema:1383551219579469649"];
-
-  // tags
-  channel = selection["Channel|||schema:1383551219579469649"]; //fb or insta or email
-  country = selection["Country|||schema:1383551219579469649"];
-  region = selection["Region|||schema:1383551219579469649"];
-  // year = calculate
-  // quarter = calculate
-  type = selection["Campaign Type|||schema:1383551219579469649"]; // fb or insta
-  objective = selection["Primary Objective|||schema:1383551219579469649"];
-
+  map_percolate_sprinklr()
 
   }
 );
 
-app.listen(3000);
+function map_percolate_sprinklr() {
+  let selection = globalSheet[0]
+  let id = selection["ID"];
+
+  // campaign specific
+  let name_ = selection["Campaign Title|||ignore"];
+  let desc = selection["Campaign Description|||ignore"];
+  let startdate = selection["Campaign Start Date|||ignore"];
+  startdate = new Date(startdate)
+  let startdate_unix = Math.floor(new Date(startdate).getTime())
+  let enddate = selection["Campaign End Date|||ignore"];
+  enddate = Math.floor(new Date(enddate).getTime())
+  let status_ = "DRAFT";
+  let audience = selection["Audience|||schema:1383551219579469649"];
+  let brand = selection["Brand|||schema:1383551219579469649"];
+
+  // tags
+  let channel = selection["Channel|||schema:1383551219579469649"]; //fb or insta or email
+  let country = selection["Country|||schema:1383551219579469649"];
+  let region = selection["Region|||schema:1383551219579469649"];
+  let year = startdate.getFullYear()
+  let quarter = Math.floor((startdate.getMonth() + 3) / 3);
+  let type = selection["Campaign Type|||schema:1383551219579469649"]; // fb or insta
+  let objective = selection["Primary Objective|||schema:1383551219579469649"];
+
+  // campaign brief
+  brief_description = selection["Section Marketing Overview - Risks & Constraints|||ignore"];
+  brief_creative_dirc_tov = selection["Section Marketing Overview - What do we want the audience to think, feel and do?|||ignore"];
+
+  // Before pushing, add if ({___} !== undefined)
+
+  // sub-campaign
+  let stay_or_booking = selection["Booking or Stay|||schema:1383551219579469649"];
+
+}
