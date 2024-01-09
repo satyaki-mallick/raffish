@@ -46,15 +46,13 @@ TODO with more time:
     2. use different library for data churning to optimize for speed
 
 
-Table bkcp:
-<table id="myTable">
-          <thead>
-            <tr>
-              <th>Check</th>
-              <th>ID</th>
-              <th>Campaign Title</th>
-              <th>Campaign Description</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
+TODO:
+    1. Implement "SUBMIT" button feedback.
+    2. Proper failure msgs if it doesn't work - for CORS or whatever
+    3. Add a README.md file
+
+
+RUN:
+    1. live-server VSCode in fe folder
+    2. flask --app src/app.py --debug run
+    3. Install a CORS plugin.

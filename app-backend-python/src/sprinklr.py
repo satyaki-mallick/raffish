@@ -73,7 +73,6 @@ class Sprinklr:
             "status": "DRAFT",
             "partnerCustomFields": self.custom_fields,
         }
-        print(payload)
         return payload
 
     def create_campaign_payload(self):
@@ -86,7 +85,6 @@ class Sprinklr:
             "status": "DRAFT",
             "partnerCustomFields": self.custom_fields,
         }
-        print(payload)
         return payload
 
     def push_payload(self, payload):
