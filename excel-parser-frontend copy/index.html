@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sprinklr App</title>
+  <link href="style.css" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+  <script src="excel_parser.js"></script>
+  <script src="submission.js"></script>
+  <script src="test.js"></script>
+</head>
+<body>
+  <button id="mybutton" onclick="hit_sprinkler_api()">OK!</button>
+  <form enctype="multipart/form-data">
+    <input id="upload" type=file name="files[]">
+  </form>
+  <button id="submit_selection" onclick="submit_selection()">Submit Selection</button>
+  <h5 id="selected_count"></h5>
+  <table id="myTable"> 
+    <thead> 
+      <tr> 
+        <th>ID</th> 
+        <th>Campaign Title</th> 
+        <th>Campain Description</th> 
+      </tr> 
+    </thead> 
+    <tbody id="tableBody"> 
+    </tbody> 
+  </table> 
+  <script src="get_doc.js"></script>
+</body>
+</html>

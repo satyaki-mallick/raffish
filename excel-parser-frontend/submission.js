@@ -14,10 +14,8 @@ function submit_selection() {
       }
     }
   }
-  selection = selections[0];
-  payload = map_selections_to_sprinklr_format(selection);
-  console.log(payload);
-  hit_sprinkler_api(payload);
+  console.log(selections)
+  hit_sprinkler_api(selections)
 }
 
 function get_selection() {
@@ -31,51 +29,33 @@ function get_selection() {
   return checked_campaigns;
 }
 
-function map_selections_to_sprinklr_format(selection) {
-  id = selection["ID"];
-  brand = selection["Brand|||schema:1383551219579469649"];
-  name_ = selection["Campaign Title|||ignore"];
-  desc = selection["Campaign Description|||ignore"];
-  startdate = selection["Campaign Start Date|||ignore"];
-  enddate = selection["Campaign End Date|||ignore"];
-  updatedate = selection["Campaign Updated At|||ignore"];
-  channel = selection["Channel|||schema:1383551219579469649"];
-  country = selection["Country|||schema:1383551219579469649"];
-  region = selection["Region|||schema:1383551219579469649"];
-  // year = calculate
-  // quarter = calculate
-  type = selection["Campaign Type|||schema:1383551219579469649"];
-  objective = selection["Primary Objective|||schema:1383551219579469649"];
-  audience = selection["Audience|||schema:1383551219579469649"];
-  status_ = "Draft";
-  payload = {
-    name: "satyaki_api_campaign",
-    description: desc,
-    status: status_,
-  };
-  return payload;
-}
+// function hit_sprinkler_api(payload) {
 
-function hit_sprinkler_api(payload) {
-  payload = {
-    name: "satyaki_api_campaign",
-    description:
-      "Create marketing assets and disseminate to Corporate teams and Hotels:\nEmail campaign to APAC non-members\nEmail footer Banners\nTV & Digital Signage banners\nSocial Media Assets\n",
-    status: "Draft",
-  };
-  // { mode: 'no-cors'},
-  fetch("https://api2.sprinklr.com/prod3/api/v2/campaign", {
-    method: "POST",
-    body: JSON.stringify(payload),
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      "Authorization":
-        "Bearer GPNjy6p150+lPLvdi3HHmyLJlVwfcbd1c92lTtwTxTthNjRlMjBiZi1kYzc2LTM4YzEtYjFjZC0yZTBjNzgxZjI1ZWE=",
-      "Key": "ugu4863nf94nx8va75ges4ps",
-    },
-  });
+//   payload = {"Hi": "from JAVASCRIPT"}
+//   fetch("http://127.0.0.1:5000/data", { mode: 'no-cors'}, {
+//     method: "POST",
+//     headers: {
+//       'Accept': 'application/json',
+//       'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify(payload),
+//   })
   // .then (response => response.json())
   // .then (json => console.log(json))
+// }
+// })
+
+function hit_sprinkler_api(payload) {
+    var myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+
+    fetch('http://127.0.0.1:5000/data', {
+      method: 'POST',
+      headers: myHeaders,
+      // mode: 'no-cors',
+      cache: 'default',
+      body: JSON.stringify({fe_data: payload})
+    })
+  .then (response => response.json())
+  .then (json => console.log(json))
 }

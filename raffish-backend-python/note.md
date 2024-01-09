@@ -39,3 +39,8 @@ Choices:
         string and the region (eg:EMEA) is kept.
     8. Adding briefs didn't work. It always returned 404 not found.
     10. Brand and Channel are added as partner custom fields. API gives success although they do not show up in GUI.
+    11. The script doesn't fail for any row. It handles it best way it can and moves to the next row.
+
+TODO with more time:
+    1. better error handling
+    2. use different library for data churning to optimize for speed
