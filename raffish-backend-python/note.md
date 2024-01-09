@@ -44,3 +44,17 @@ Choices:
 TODO with more time:
     1. better error handling
     2. use different library for data churning to optimize for speed
+
+
+Table bkcp:
+<table id="myTable">
+          <thead>
+            <tr>
+              <th>Check</th>
+              <th>ID</th>
+              <th>Campaign Title</th>
+              <th>Campaign Description</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>

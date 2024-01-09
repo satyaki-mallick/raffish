@@ -30,9 +30,6 @@ function display_in_table(XL_row_object) {
   for (item of XL_row_object) {
     let row = document.createElement("tr");
 
-    let idCell = document.createElement("td");
-    idCell.textContent = item["ID"];
-
     let mycheckbox = document.createElement("input");
     mycheckbox.type = "checkbox";
     mycheckbox.className = "mycheckbox";
@@ -41,8 +38,6 @@ function display_in_table(XL_row_object) {
     checkboxcell.appendChild(mycheckbox);
     row.appendChild(checkboxcell);
 
-    row.appendChild(idCell);
-
     let titleCell = document.createElement("td");
     titleCell.textContent = item["Campaign Title|||ignore"];
     row.appendChild(titleCell);
@@ -50,6 +45,22 @@ function display_in_table(XL_row_object) {
     let descCell = document.createElement("td");
     descCell.textContent = item["Campaign Description|||ignore"];
     row.appendChild(descCell);
+
+    let startCell = document.createElement("td");
+    startCell.textContent = item["Campaign Start Date|||ignore"];
+    row.appendChild(startCell);
+
+    let endCell = document.createElement("td");
+    endCell.textContent = item["Campaign End Date|||ignore"];
+    row.appendChild(endCell);
+
+    let audienceCell = document.createElement("td");
+    audienceCell.textContent = item["Audience|||schema:1383551219579469649"];
+    row.appendChild(audienceCell);
+
+    let brandCell = document.createElement("td");
+    brandCell.textContent = item["Brand|||schema:1383551219579469649"];
+    row.appendChild(brandCell);
 
     tableBody.appendChild(row);
     calc_selected_counter()

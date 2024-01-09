@@ -10,6 +10,7 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #008000, #ffff00);
   padding: 10px;
+  position: relative;
 }
 
 .excel-app {
@@ -19,6 +20,7 @@
   margin: 100px auto 20px;
   padding: 40px 30px 70px;
   border-radius: 10px;
+  position: relative;
 }
 
 .excel-app h2 {
@@ -63,31 +65,43 @@ button {
   font-weight: bold;
 }
 
+.table-app {
+    width: 95%;
+    /* max-width: 540px; */
+    background: #fff;
+    margin: 100px auto 20px;
+    padding: 40px 30px 70px;
+    border-radius: 10px;
+    position: relative;
+  }
+
 table {
-  position: absolute;
+  position: relative;
   z-index: 2;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 60%;
+  width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
   border-spacing: 0;
-  box-shadow: 0 2px 15px rgba(64, 64, 64, 0.7);
+  box-shadow: 0 2px 15px rgba(64, 64, 64, .7);
   border-radius: 12px 12px 0 0;
-  overflow: hidden;
+  overflow: scroll;
+  /* white-space: normal; */
+  word-break:break-all;
+  display: table;
 }
+
 td,
 th {
   padding: 15px 20px;
   text-align: center;
 }
 th {
-  background-color: #ba68c8;
+  background-color: #1b4332;
   color: #fafafa;
   font-family: "Open Sans", Sans-serif;
   font-weight: 200;
   text-transform: uppercase;
-  position: sticky;
+  position: sticky; 
   top: 0;
 }
 tr {
