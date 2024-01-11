@@ -4,6 +4,7 @@
 ### Steps to Run
 1. Run **live-server** (VS-Code plug-in) frontend folder
 2. Run **flask --app src/app.py --debug run** from the backend folder
+    - To run above one might need to run poetry init in the folder to install the packages before running the command.
 3. Install a CORS plugin for any browser for FE and BE communication
 
 ### GUI
