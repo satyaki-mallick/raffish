@@ -29,24 +29,9 @@ function get_selection() {
   return checked_campaigns;
 }
 
-// function hit_sprinkler_api(payload) {
-
-//   payload = {"Hi": "from JAVASCRIPT"}
-//   fetch("http://127.0.0.1:5000/data", { mode: 'no-cors'}, {
-//     method: "POST",
-//     headers: {
-//       'Accept': 'application/json',
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify(payload),
-//   })
-  // .then (response => response.json())
-  // .then (json => console.log(json))
-// }
-// })
-
 function hit_sprinkler_api(payload) {
     var myHeaders = new Headers();
+    // payload = {"Hi": "from JAVASCRIPT"}
     myHeaders.append('Content-Type', 'application/json');
 
     fetch('http://127.0.0.1:5000/data', {
@@ -57,5 +42,7 @@ function hit_sprinkler_api(payload) {
       body: JSON.stringify({fe_data: payload})
     })
   .then (response => response.json())
-  .then (json => console.log(json))
+  .then (json => {
+    alert(`Campaigns Imported: ${json['Success']}\nCampaigns failed to Import: ${json['Failure']}`)
+  })
 }

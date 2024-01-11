@@ -13,7 +13,7 @@ def hello_world():
     response = request.json['fe_data']
     
     df = pd.DataFrame(response)
-    processor.process_dataframe(df)
-    return '{"Status": "OK"}'
+    response_msg = processor.process_dataframe(df)
+    return response_msg
 
 

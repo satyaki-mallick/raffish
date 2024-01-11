@@ -11,3 +11,5 @@ def process_dataframe(df):
         percolate_obj = Percolate(row)
         sprinklr_obj.init_with_percolate(percolate_obj)
         sprinklr_obj.create_campaign()
+    
+    return { "Success" : sprinklr_obj.success_count, "Failure" : sprinklr_obj.failure_count}

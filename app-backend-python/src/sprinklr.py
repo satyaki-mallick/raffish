@@ -12,6 +12,8 @@ logging.basicConfig(level=logging.INFO)
 class Sprinklr:
     def __init__(self):
         self.created_campaign_dict = {}
+        self.success_count = 0
+        self.failure_count = 0
     
     def init_with_percolate(self, percolate_obj: Percolate):
         self.percolate_obj = percolate_obj
@@ -30,7 +32,15 @@ class Sprinklr:
         else:
             payload = self.create_campaign_payload()
             print("is campaign")
-        self.push_payload(payload)
+        response = self.push_payload(payload)
+        self.process_response(response)
+    
+    def process_response(self, response):
+        
+        if response.status_code == 200:
+            self.success_count += 1
+        else:
+            self.failure_count += 1
 
     def create_tags(self):
         tags = []
@@ -100,6 +110,7 @@ class Sprinklr:
             c_id = response_dict["data"]["id"]
             logging.info(f"Created Campaign: {self.campaign_name} with id: {c_id}")
             self.update_key_dict(c_id)
+        return response
 
     def update_key_dict(self, c_id):
         self.created_campaign_dict[self.campaign_stem_text] = c_id
